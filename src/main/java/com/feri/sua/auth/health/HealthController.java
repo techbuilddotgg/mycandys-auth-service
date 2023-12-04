@@ -1,4 +1,4 @@
-package com.feri.sua.auth.routes.health;
+package com.feri.sua.auth.health;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

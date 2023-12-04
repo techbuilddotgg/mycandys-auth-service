@@ -1,4 +1,4 @@
-package com.feri.sua.auth.routes.user;
+package com.feri.sua.auth.user;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;

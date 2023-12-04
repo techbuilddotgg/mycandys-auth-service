@@ -1,0 +1,19 @@
+server:
+  port: ${PORT}
+
+spring:
+  application:
+    name: ${APP_NAME}
+  data:
+    mongodb:
+      uri: ${DATABASE_URI}
+      database: ${DATABASE_NAME}
+
+
+application:
+  security:
+    jwt:
+      secret-key: ${JWT_SECRET}
+      expiration: ${JWT_EXP}
+      refresh-token:
+        expiration: ${JWT_REFRESH_EXP}

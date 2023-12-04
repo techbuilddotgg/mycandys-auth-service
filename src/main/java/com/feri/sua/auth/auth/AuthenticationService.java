@@ -2,6 +2,7 @@ package com.feri.sua.auth.auth;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.feri.sua.auth.auth.dto.VerifyTokenResponseDto;
 import com.feri.sua.auth.config.JwtService;
 import com.feri.sua.auth.user.Role;
 import com.feri.sua.auth.user.User;
@@ -113,4 +114,13 @@ public class AuthenticationService {
       }
     }
   }
+
+    public VerifyTokenResponseDto verify(String authHeader) {
+      String token = authHeader.replace("Bearer ", "");
+      Token userToken = tokenRepository.findByToken(token)
+            .orElseThrow(() -> new RuntimeException("Token not found"));
+      return VerifyTokenResponseDto.builder()
+              .userId(userToken.getUserId())
+              .build();
+    }
 }

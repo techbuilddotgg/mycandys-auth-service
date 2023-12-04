@@ -1,13 +1,11 @@
 package com.feri.sua.auth.auth;
 
+import com.feri.sua.auth.auth.dto.VerifyTokenResponseDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -30,6 +28,14 @@ public class AuthenticationController {
   ) {
     return ResponseEntity.ok(service.authenticate(request));
   }
+
+  @GetMapping("/verify")
+    public ResponseEntity<VerifyTokenResponseDto> verify(
+        @RequestHeader("Authorization") String token
+    ) {
+        return ResponseEntity.ok(service.verify(token));
+    }
+
 
   @PostMapping("/refresh-token")
   public void refreshToken(

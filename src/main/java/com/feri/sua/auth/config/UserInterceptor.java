@@ -9,13 +9,9 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 @Component
 public class UserInterceptor implements HandlerInterceptor {
-
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
         String userId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
-        System.out.println("User: " + userId);
         request.setAttribute("userId", userId);
         return true;
     }

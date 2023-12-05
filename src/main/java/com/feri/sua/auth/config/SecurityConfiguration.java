@@ -13,6 +13,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.security.web.header.writers.StaticHeadersWriter;
+
 import static org.springframework.http.HttpMethod.DELETE;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
@@ -25,17 +27,17 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @EnableMethodSecurity
 public class SecurityConfiguration {
 
-    private static final String[] WHITE_LIST_URL = {"/auth/**",
-            "/v2/api-docs",
-            "/v3/api-docs",
-            "/v3/api-docs/**",
-            "/swagger-resources",
-            "/swagger-resources/**",
-            "/configuration/ui",
-            "/configuration/security",
-            "/swagger-ui/**",
-            "/webjars/**",
-            "/swagger-ui.html"};
+    private static final String[] WHITE_LIST_URL = {"/health", "/auth/**",
+            "/auth-service/v2/api-docs",
+            "/auth-service/v3/api-docs",
+            "/auth-service/v3/api-docs/**",
+            "/auth-service/swagger-resources",
+            "/auth-service/swagger-resources/**",
+            "/auth-service/configuration/ui",
+            "/auth-service/configuration/security",
+            "/auth-service/swagger-ui/**",
+            "/auth-service/webjars/**",
+            "/auth-service/swagger-ui.html"};
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
     private final LogoutHandler logoutHandler;
@@ -58,6 +60,13 @@ public class SecurityConfiguration {
                         logout.logoutUrl("/api/v1/auth/logout")
                                 .addLogoutHandler(logoutHandler)
                                 .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
+                )
+                .headers(headers ->
+                        headers.addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Origin", "*"))
+                                .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS"))
+                                .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Headers", "Authorization, Content-Type, X-Requested-With, X-XSRF-TOKEN, Cache-Control, Pragma, Origin, Authorization, Content-Type, X-Requested-With"))
+                                .addHeaderWriter(new StaticHeadersWriter("Access-Control-Expose-Headers", "Authorization, Content-Type, X-Requested-With, X-XSRF-TOKEN, Cache-Control, Pragma, Origin, Authorization, Content-Type, X-Requested-With"))
+                                .addHeaderWriter(new StaticHeadersWriter("Access-Control-Max-Age", "3600"))
                 )
         ;
 

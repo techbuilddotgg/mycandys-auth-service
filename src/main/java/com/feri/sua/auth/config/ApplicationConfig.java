@@ -20,7 +20,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @RequiredArgsConstructor
-public class ApplicationConfig  implements WebMvcConfigurer {
+public class ApplicationConfig implements WebMvcConfigurer {
 
   private final UserRepository repository;
 
@@ -55,7 +55,7 @@ public class ApplicationConfig  implements WebMvcConfigurer {
 
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
-    registry.addInterceptor(new UserInterceptor()).addPathPatterns("/user/**");
+    registry.addInterceptor(new UserInterceptor()).addPathPatterns("/users/**");
   }
 
 }

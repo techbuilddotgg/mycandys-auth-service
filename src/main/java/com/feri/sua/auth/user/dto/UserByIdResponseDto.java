@@ -12,7 +12,6 @@ public class UserByIdResponseDto {
 
     private String id;
     private String email;
-
     private Role role;
 
 }

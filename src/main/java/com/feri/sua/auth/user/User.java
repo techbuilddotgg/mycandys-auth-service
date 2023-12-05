@@ -23,9 +23,12 @@ public class User implements UserDetails {
     @Indexed(unique = true)
     private String email;
     private String password;
-
     private String name;
-
+    private String city;
+    private String country;
+    private String address;
+    private String postalCode;
+    private String phone;
     private Role role;
 
     public User(String email, String password, String name) {

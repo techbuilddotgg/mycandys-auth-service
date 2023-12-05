@@ -87,7 +87,7 @@ public class AuthenticationService {
     tokenRepository.saveAll(validUserTokens);
   }
 
-  public void refreshToken(
+  public AuthenticationResponse refreshToken(
           HttpServletRequest request,
           HttpServletResponse response
   ) throws IOException {
@@ -95,7 +95,7 @@ public class AuthenticationService {
     final String refreshToken;
     final String userEmail;
     if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
-      return;
+      return null;
     }
     refreshToken = authHeader.substring(7);
     userEmail = jwtService.extractUsername(refreshToken);
@@ -111,8 +111,13 @@ public class AuthenticationService {
                 .refreshToken(refreshToken)
                 .build();
         new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
+        return AuthenticationResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
       }
     }
+    return null;
   }
 
     public VerifyTokenResponseDto verify(String authHeader) {

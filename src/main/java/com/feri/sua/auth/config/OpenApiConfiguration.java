@@ -14,18 +14,16 @@ import io.swagger.v3.oas.annotations.servers.Server;
         info = @Info(
                 description = "Authentification API for MyCandys application",
                 title = "MyCandys Authentification API",
-                version = "1.0",
-                termsOfService = "Terms of service"
+                version = "1.0"
         ),
         servers = {
                 @Server(
-                        description = "Local ENV",
                         url = "http://localhost:8080"
                 ),
         }
 )
 @SecurityScheme(
-        name = "bearerAuth",
+        name = "Bearer Authentication",
         description = "JWT auth description",
         scheme = "bearer",
         type = SecuritySchemeType.HTTP,

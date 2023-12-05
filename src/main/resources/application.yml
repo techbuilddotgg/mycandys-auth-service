@@ -19,9 +19,3 @@ application:
       expiration: ${JWT_EXP}
       refresh-token:
         expiration: ${JWT_REFRESH_EXP}
-
-springdoc:
-  api-docs:
-    path: /auth-service/v3/api-docs #these urls will used to load the swagger ui of this service by the api gateway
-  swagger-ui:
-    path: /auth-service/swagger-ui.html

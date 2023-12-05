@@ -28,16 +28,16 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 public class SecurityConfiguration {
 
     private static final String[] WHITE_LIST_URL = {"/health", "/auth/**",
-            "/auth-service/v2/api-docs",
-            "/auth-service/v3/api-docs",
-            "/auth-service/v3/api-docs/**",
-            "/auth-service/swagger-resources",
-            "/auth-service/swagger-resources/**",
-            "/auth-service/configuration/ui",
-            "/auth-service/configuration/security",
-            "/auth-service/swagger-ui/**",
-            "/auth-service/webjars/**",
-            "/auth-service/swagger-ui.html"};
+            "/v2/api-docs",
+            "/v3/api-docs",
+            "/v3/api-docs/**",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui/**",
+            "/webjars/**",
+            "/swagger-ui.html"};
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
     private final LogoutHandler logoutHandler;

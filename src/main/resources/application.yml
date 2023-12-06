@@ -2,8 +2,11 @@ server:
   port: ${PORT}
   servlet:
     context-path: "/"
+  forward-headers-strategy: framework
 
 spring:
+  profiles:
+    active: ${SPRING_PROFILE}
   application:
     name: ${APP_NAME}
   data:
@@ -19,3 +22,6 @@ application:
       expiration: ${JWT_EXP}
       refresh-token:
         expiration: ${JWT_REFRESH_EXP}
+  swagger:
+    server:
+      url: ${SWAGGER_SERVER_URL}

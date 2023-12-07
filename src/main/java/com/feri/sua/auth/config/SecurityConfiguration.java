@@ -51,7 +51,6 @@ public class SecurityConfiguration {
                     corsConfiguration.setAllowedOrigins(java.util.List.of("*"));
                     corsConfiguration.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     corsConfiguration.setAllowedHeaders(java.util.List.of("*"));
-                    corsConfiguration.setExposedHeaders(java.util.List.of("Authorization", "Content-Type", "X-Requested-With", "X-XSRF-TOKEN", "Cache-Control", "Pragma", "Origin", "Authorization", "Content-Type", "X-Requested-With"));
                     corsConfiguration.setMaxAge(3600L);
                     return corsConfiguration;
                 }))
@@ -72,8 +71,7 @@ public class SecurityConfiguration {
                 .headers(headers ->
                         headers.addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Origin", "*"))
                                 .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS"))
-                                .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Headers", "Authorization, Content-Type, X-Requested-With, X-XSRF-TOKEN, Cache-Control, Pragma, Origin, Authorization, Content-Type, X-Requested-With"))
-                                .addHeaderWriter(new StaticHeadersWriter("Access-Control-Expose-Headers", "Authorization, Content-Type, X-Requested-With, X-XSRF-TOKEN, Cache-Control, Pragma, Origin, Authorization, Content-Type, X-Requested-With"))
+                                .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Headers", "*"))
                                 .addHeaderWriter(new StaticHeadersWriter("Access-Control-Max-Age", "3600"))
                 )
         ;

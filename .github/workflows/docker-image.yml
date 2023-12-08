@@ -44,6 +44,7 @@ jobs:
         run: |
           curl -X POST \
             -H "Content-Type: application/json" \
+            -H "Authorization: Bearer ${{secrets.TOKEN}}" \
             -d '{
               "Image": "${{secrets.DOCKER_REPO}}/${{secrets.DOCKER_IMAGE}}:$TAG",
               "Env":[
@@ -67,5 +68,4 @@ jobs:
               "NetworkMode": "${{secrets.PORTAINER_NETWORK}}",
               "name": "${{secrets.DOCKER_IMAGE}}-test"
             }' \
-            -u "${{secrets.PORTAINER_USERNAME}}:${{secrets.PORTAINER_PASSWORD}}" \
             https://${{secrets.PORTAINER_URI}}/api/endpoints/1/docker/containers/create

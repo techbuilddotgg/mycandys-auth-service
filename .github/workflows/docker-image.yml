@@ -39,3 +39,33 @@ jobs:
 
       - name: DockerHub Push
         run: docker push ${{secrets.DOCKER_REPO}}/${{secrets.DOCKER_IMAGE}}:$TAG
+
+      - name: Deploy to Portainer
+        run: |
+          curl -X POST \
+            -H "Content-Type: application/json" \
+            -d '{
+              "Image": "${{secrets.DOCKER_REPO}}/${{secrets.DOCKER_IMAGE}}:$TAG",
+              "Env":[
+                "APP_NAME=${{secrets.ENV_APP_NAME}}",
+                "DATABASE_NAME=${{secrets.ENV_DATABASE_NAME}}",
+                "DATABASE_URI=${{secrets.ENV_DATABASE_URI}}",
+                "JWT_EXP=${{secrets.ENV_JWT_EXP}}",
+                "JWT_REFRESH_EXP=${{secrets.ENV_JWT_REFRESH_EXP}}",
+                "JWT_SECRET=${{secrets.ENV_JWT_SECRET}}",
+                "PORT=${{secrets.ENV_PORT}}",
+                "SPRING_PROFILE=${{secrets.ENV_SPRING_PROFILE}}",
+                "SWAGGER_SERVER_URL=${{secrets.ENV_SWAGGER_SERVER_URL}}",
+              ],
+              "PortBindings":{
+                "${{secrets.ENV_PORT}}/tcp":[
+                  {"HostPort":"${{secrets.ENV_PORT}}"}
+                ]
+              },
+              "Privileged": false,
+              "PublishAllPorts": false,
+              "NetworkMode": "${{secrets.PORTAINER_NETWORK}}",
+              "name": "${{secrets.DOCKER_IMAGE}}-test"
+            }' \
+            -u "${{secrets.PORTAINER_USERNAME}}:${{secrets.PORTAINER_PASSWORD}}" \
+            https://${{secrets.PORTAINER_URI}}/api/endpoints/1/docker/containers/create

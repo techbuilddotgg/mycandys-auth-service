@@ -14,11 +14,7 @@ public class UserService {
 
     public UserByIdResponseDto getUserById(String userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
-        return UserByIdResponseDto.builder()
-                .id(user.getId())
-                .email(user.getEmail())
-                .role(user.getRole())
-                .build();
+        return UserByIdResponseDto.builder().id(user.getId()).email(user.getEmail()).name(user.getName()).address(user.getAddress()).city(user.getCity()).country(user.getCountry()).postalCode(user.getPostalCode()).phone(user.getPhone()).role(user.getRole()).build();
     }
 
     public SaveUserDto saveUser(SaveUserDto saveUserDto, String userId) {

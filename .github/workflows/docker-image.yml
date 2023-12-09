@@ -44,7 +44,7 @@ jobs:
         run: |
           HTTP_RESPONSE=$(curl --write-out "RAW_HTTP_STATUS:%{http_code}" -X DELETE \
             -H "Content-Type: application/json" \
-            -H "Authorization: Bearer ${{secrets.TOKEN}}" \
+            -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTQ4LCJ1c2VybmFtZSI6InNvYV9ydjJfbXNlbXByaW1vem5payIsInJvbGUiOjIsImV4cCI6MTcwMjE1ODY4M30._b4MSjp7Ex46jew_rH8UQsLsrkObCy5MUAAHilHIRKc" \
             https://${{secrets.PORTAINER_URI}}/api/endpoints/1/docker/containers/${{vars.CONTAINER_ID}}?force=true&v=0
           )
           HTTP_BODY=$(echo $HTTP_RESPONSE | sed -e 's/RAW_HTTP_STATUS\:.*//g')

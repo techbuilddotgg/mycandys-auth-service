@@ -42,7 +42,7 @@ jobs:
 
       - name: Delete Portainer Container If Exists
         run: |
-          HTTP_RESPONSE=$(curl --write-out "RAW_HTTP_STATUS:%{http_code} -X DELETE \
+          HTTP_RESPONSE=$(curl --write-out "RAW_HTTP_STATUS:%{http_code}" -X DELETE \
             -H "Content-Type: application/json" \
             -H "Authorization: Bearer ${{secrets.TOKEN}}" \
             https://${{secrets.PORTAINER_URI}}/api/endpoints/1/docker/containers/${{vars.CONTAINER_ID}}?force=true&v=0

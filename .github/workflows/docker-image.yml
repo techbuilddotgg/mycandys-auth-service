@@ -53,7 +53,7 @@ jobs:
             -H "Sec-Fetch-Dest: empty" \
             -H "Sec-Fetch-Mode: cors" \
             -H "Sec-Fetch-Site: same-origin" \
-            -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" \
             https://${{secrets.PORTAINER_URI}}/api/endpoints/1/docker/containers/${{vars.CONTAINER_ID}}?force=true&v=0
           )
           HTTP_BODY=$(echo $HTTP_RESPONSE | sed -e 's/RAW_HTTP_STATUS\:.*//g')

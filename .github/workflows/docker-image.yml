@@ -48,9 +48,9 @@ jobs:
             https://${{secrets.PORTAINER_URI}}/api/endpoints/1/docker/containers/${{vars.CONTAINER_ID}}?force=true&v=0
           )
           
-          http_code=$(echo "$response" | awk '{print $NF}')
+          http_code=$(echo $response | jq -r '.statusCode')
           
-          if [[ ! "$http_code" =~ ^2[0-9][0-9]$ ]]; then
+          if [[ ! $http_code =~ ^2 ]]; then
             echo "HTTP response code is $http_code. Deployment failed."
             exit 1
           fi

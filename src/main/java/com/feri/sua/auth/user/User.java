@@ -8,7 +8,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 
+import java.util.Arrays;
 import java.util.Collection;
+
+import static com.feri.sua.auth.user.Permission.ADMIN_READ;
 
 @Data
 @Builder
@@ -40,7 +43,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return role.getAuthorities();
     }
 
     @Override

@@ -15,6 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.header.writers.StaticHeadersWriter;
 
+import static com.feri.sua.auth.user.Permission.*;
 import static org.springframework.http.HttpMethod.DELETE;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
@@ -57,6 +58,9 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(req ->
                         req.requestMatchers(WHITE_LIST_URL)
                                 .permitAll()
+                                .requestMatchers(POST, "/users/**").hasAuthority(ADMIN_CREATE.getPermission())
+                                .requestMatchers(PUT, "/users/**").hasAuthority(ADMIN_CREATE.getPermission())
+                                .requestMatchers(DELETE, "/users/**").hasAuthority(ADMIN_DELETE.getPermission())
                                 .anyRequest()
                                 .authenticated()
                 )

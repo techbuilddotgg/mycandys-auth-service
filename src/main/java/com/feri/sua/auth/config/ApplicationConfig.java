@@ -53,9 +53,4 @@ public class ApplicationConfig implements WebMvcConfigurer {
     return new BCryptPasswordEncoder();
   }
 
-  @Override
-  public void addInterceptors(InterceptorRegistry registry) {
-    registry.addInterceptor(new UserInterceptor()).addPathPatterns("/users/**");
-  }
-
 }

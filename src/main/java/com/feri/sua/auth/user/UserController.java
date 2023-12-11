@@ -19,24 +19,18 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping()
-    public UserByIdResponseDto getUserById(@RequestAttribute("userId") String userId){
-        System.out.println(userId);
+    @GetMapping("/{userId}")
+    public UserByIdResponseDto getUserById(@PathVariable("userId") String userId){
         return userService.getUserById(userId);
     }
 
-    @PostMapping()
-    public SaveUserDto saveUser(@RequestBody SaveUserDto saveUserDto, @RequestAttribute("userId") String userId){
+    @PutMapping("/{userId}")
+    public SaveUserDto updateUser(@RequestBody SaveUserDto saveUserDto, @PathVariable("userId") String userId){
         return userService.saveUser(saveUserDto, userId);
     }
 
-    @PutMapping()
-    public SaveUserDto updateUser(@RequestBody SaveUserDto saveUserDto, @RequestAttribute("userId") String userId){
-        return userService.saveUser(saveUserDto, userId);
-    }
-
-    @DeleteMapping()
-    public void deleteUser(@RequestAttribute("userId") String userId){
+    @DeleteMapping("/{userId}")
+    public void deleteUser(@PathVariable("userId") String userId){
         userService.deleteUser(userId);
     }
 

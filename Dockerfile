@@ -1,15 +1,6 @@
 # Use OpenJDK 17 as base image
 FROM openjdk:17-alpine
 
-# Set environment variables for the Spring Boot app
-ENV PORT='8080'
-ENV APP_NAME='Default'
-ENV DATABASE_URI='mongodb://localhost:27017/default'
-ENV DATABASE_NAME='default'
-ENV JWT_SECRET='secret'
-ENV JWT_EXPIRATION='86400000'
-ENV JWT_REFRESH_EXP='86400000'
-
 # Create app directory
 RUN mkdir /app
 

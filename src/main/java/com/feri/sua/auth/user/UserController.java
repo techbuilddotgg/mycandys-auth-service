@@ -1,9 +1,11 @@
 package com.feri.sua.auth.user;
 
+import com.feri.sua.auth.user.dto.EmailListDto;
 import com.feri.sua.auth.user.dto.SaveUserDto;
 import com.feri.sua.auth.user.dto.UserByIdResponseDto;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.constraints.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +24,11 @@ public class UserController {
     @GetMapping("/{userId}")
     public UserByIdResponseDto getUserById(@PathVariable("userId") String userId){
         return userService.getUserById(userId);
+    }
+
+    @GetMapping("/emails")
+    public EmailListDto getUsersEmails(){
+        return userService.getUsersEmails();
     }
 
     @PutMapping("/{userId}")

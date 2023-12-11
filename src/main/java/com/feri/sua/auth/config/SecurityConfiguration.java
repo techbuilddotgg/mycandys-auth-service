@@ -61,6 +61,7 @@ public class SecurityConfiguration {
                                 .requestMatchers(POST, "/users/**").hasAuthority(ADMIN_CREATE.getPermission())
                                 .requestMatchers(PUT, "/users/**").hasAuthority(ADMIN_CREATE.getPermission())
                                 .requestMatchers(DELETE, "/users/**").hasAuthority(ADMIN_DELETE.getPermission())
+                                .requestMatchers(GET, "/users/emails").hasAuthority(ADMIN_READ.getPermission())
                                 .anyRequest()
                                 .authenticated()
                 )

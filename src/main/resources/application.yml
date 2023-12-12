@@ -13,6 +13,11 @@ spring:
     mongodb:
       uri: ${DATABASE_URI}
       database: ${DATABASE_NAME}
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
 
 
 application:

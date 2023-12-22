@@ -1,9 +1,13 @@
 package com.feri.sua.auth.config;
 
+import com.feri.sua.auth.common.errors.ApiError;
 import com.feri.sua.auth.config.JwtAuthenticationFilter;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.header.writers.StaticHeadersWriter;
@@ -43,6 +48,9 @@ public class SecurityConfiguration {
     private final AuthenticationProvider authenticationProvider;
     private final LogoutHandler logoutHandler;
 
+    @Autowired
+    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -58,6 +66,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(req ->
                         req.requestMatchers(WHITE_LIST_URL)
                                 .permitAll()
+                                .requestMatchers("/error").permitAll()
                                 .requestMatchers(POST, "/users/**").hasAuthority(ADMIN_CREATE.getPermission())
                                 .requestMatchers(PUT, "/users/**").hasAuthority(ADMIN_CREATE.getPermission())
                                 .requestMatchers(DELETE, "/users/**").hasAuthority(ADMIN_DELETE.getPermission())
@@ -69,7 +78,7 @@ public class SecurityConfiguration {
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout(logout ->
-                        logout.logoutUrl("/api/v1/auth/logout")
+                        logout.logoutUrl("/auth/logout")
                                 .addLogoutHandler(logoutHandler)
                                 .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
                 )
@@ -79,8 +88,22 @@ public class SecurityConfiguration {
                                 .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Headers", "*"))
                                 .addHeaderWriter(new StaticHeadersWriter("Access-Control-Max-Age", "3600"))
                 )
+
+
+
         ;
 
         return http.build();
+    }
+
+    @Bean
+    public AuthenticationFailureHandler authenticationFailureHandler() {
+        return (request, response, exception) -> {
+            System.out.println(exception.getMessage());
+            ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED, "Invalid username or password");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write(apiError.serializeToJson());
+        };
     }
 }

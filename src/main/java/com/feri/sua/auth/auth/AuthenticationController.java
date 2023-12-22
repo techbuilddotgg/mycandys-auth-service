@@ -1,6 +1,7 @@
 package com.feri.sua.auth.auth;
 
 import com.feri.sua.auth.auth.dto.VerifyTokenResponseDto;
+import com.feri.sua.auth.common.exceptions.NotFoundException;
 import com.feri.sua.auth.config.LogoutService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,7 +29,7 @@ public class AuthenticationController {
   @PostMapping("/login")
   public ResponseEntity<AuthenticationResponse> authenticate(
       @RequestBody AuthenticationRequest request
-  ) {
+  ) throws NotFoundException {
     return ResponseEntity.ok(service.authenticate(request));
   }
 
@@ -36,7 +37,7 @@ public class AuthenticationController {
   @GetMapping("/verify")
     public ResponseEntity<VerifyTokenResponseDto> verify(
         @RequestHeader("Authorization") String token
-    ) {
+    ) throws NotFoundException {
         return ResponseEntity.ok(service.verify(token));
     }
 

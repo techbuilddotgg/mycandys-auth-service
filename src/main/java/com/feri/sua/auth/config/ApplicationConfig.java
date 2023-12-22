@@ -23,6 +23,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class ApplicationConfig implements WebMvcConfigurer {
 
   private final UserRepository repository;
+  private final LoggingInterceptor loggingInterceptor;
 
   @Bean
   public UserDetailsService userDetailsService() {
@@ -51,6 +52,11 @@ public class ApplicationConfig implements WebMvcConfigurer {
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
+  }
+
+  @Override
+  public void addInterceptors(InterceptorRegistry registry) {
+    registry.addInterceptor(loggingInterceptor);
   }
 
 }

@@ -1,5 +1,6 @@
 package com.feri.sua.auth.config;
 
+import com.feri.sua.auth.common.errors.ApiError;
 import com.feri.sua.auth.token.TokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -7,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -35,20 +37,31 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       filterChain.doFilter(request, response);
       return;
     }
+
     final String authHeader = request.getHeader("Authorization");
-    final String jwt;
-    final String userEmail;
-    if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
-      filterChain.doFilter(request, response);
+    if (authHeader == null || !authHeader.startsWith("Bearer ") || authHeader.length() < 8) {
+      createErrorResponse(response, "No token found in the header", HttpStatus.BAD_REQUEST);
       return;
     }
-    jwt = authHeader.substring(7);
-    userEmail = jwtService.extractUsername(jwt);
+    String jwt = authHeader.substring(7);
+    String userEmail;
+
+    try {
+      userEmail = jwtService.extractUsername(jwt);
+    }
+    catch (Exception e) {
+      createErrorResponse(response, "Token is not valid", HttpStatus.UNAUTHORIZED);
+      return;
+    }
+
+
     if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
       UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+
       var isTokenValid = tokenRepository.findByToken(jwt)
           .map(t -> !t.isExpired() && !t.isRevoked())
           .orElse(false);
+
       if (jwtService.isTokenValid(jwt, userDetails) && isTokenValid) {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
             userDetails,
@@ -60,7 +73,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         );
         SecurityContextHolder.getContext().setAuthentication(authToken);
       }
+      else {
+        createErrorResponse(response, "Token is not valid", HttpStatus.UNAUTHORIZED);
+      }
+    }
+    else {
+      createErrorResponse(response, "Token is not valid", HttpStatus.BAD_REQUEST);
     }
     filterChain.doFilter(request, response);
+  }
+
+  private void createErrorResponse(HttpServletResponse response, String message, HttpStatus status) throws IOException {
+    response.setContentType("application/json");
+    response.setStatus(status.value());
+    ApiError error = new ApiError(status, message);
+    response.getWriter().write(error.serializeToJson());
   }
 }

@@ -5,6 +5,8 @@ server:
   forward-headers-strategy: framework
 
 spring:
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.web.errormvcautoconfiguration
   profiles:
     active: ${SPRING_PROFILE}
   application:
@@ -30,3 +32,8 @@ application:
   swagger:
     server:
       url: ${SWAGGER_SERVER_URL}
+
+
+logging:
+  level:
+    root: info

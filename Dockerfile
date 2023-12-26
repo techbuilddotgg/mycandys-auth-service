@@ -18,4 +18,4 @@ RUN apk add --no-cache maven && mvn -f /app/pom.xml clean package
 EXPOSE ${PORT}
 
 # Command to run the Spring Boot application when the container starts
-CMD ["java", "-XX:MaxRAM=50m", "-XX:+UseSerialGC", "-jar", "/app/target/sua-auth-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-XX:MaxRAM=150m", "-XX:+UseSerialGC", "-jar", "/app/target/sua-auth-0.0.1-SNAPSHOT.jar"]

@@ -1,5 +1,9 @@
 server:
   port: ${PORT}
+  tomcat:
+    max-connections: 10
+    threads:
+      max: 3
   servlet:
     context-path: "/"
   forward-headers-strategy: framework

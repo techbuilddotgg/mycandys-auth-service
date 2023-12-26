@@ -33,7 +33,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       @NonNull HttpServletResponse response,
       @NonNull FilterChain filterChain
   ) throws ServletException, IOException {
-    if (request.getServletPath().contains("/auth")) {
+    System.out.println(request.getServletPath());
+    if (WhiteList.isPresent(request.getServletPath())) {
       filterChain.doFilter(request, response);
       return;
     }
@@ -41,6 +42,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     final String authHeader = request.getHeader("Authorization");
     if (authHeader == null || !authHeader.startsWith("Bearer ") || authHeader.length() < 8) {
       createErrorResponse(response, "No token found in the header", HttpStatus.BAD_REQUEST);
+      filterChain.doFilter(request, response);
       return;
     }
     String jwt = authHeader.substring(7);
@@ -51,6 +53,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
     catch (Exception e) {
       createErrorResponse(response, "Token is not valid", HttpStatus.UNAUTHORIZED);
+      filterChain.doFilter(request, response);
       return;
     }
 
@@ -75,10 +78,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       }
       else {
         createErrorResponse(response, "Token is not valid", HttpStatus.UNAUTHORIZED);
+        filterChain.doFilter(request, response);
+        return;
       }
     }
     else {
       createErrorResponse(response, "Token is not valid", HttpStatus.BAD_REQUEST);
+      filterChain.doFilter(request, response);
+      return;
     }
     filterChain.doFilter(request, response);
   }

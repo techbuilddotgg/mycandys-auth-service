@@ -18,4 +18,4 @@ COPY --from=builder /app/target/sua-auth-0.0.1-SNAPSHOT.jar ./sua-auth-0.0.1-SNA
 
 EXPOSE ${PORT}
 
-CMD ["java", "-XX:MaxRAM=200m", "-XX:+UseSerialGC", "-jar", "/app/sua-auth-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "/app/sua-auth-0.0.1-SNAPSHOT.jar"]

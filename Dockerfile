@@ -1,21 +1,21 @@
-# Use OpenJDK 17 as base image
-FROM openjdk:17-alpine
+FROM maven:3.8.4-openjdk-17 as builder
 
-# Create app directory
-RUN mkdir /app
-
-# Set the working directory in the container
 WORKDIR /app
 
-# Copy the Maven configuration files
-COPY pom.xml /app/pom.xml
-COPY src /app/src
+COPY pom.xml .
 
-# Build the Spring Boot application using Maven
-RUN apk add --no-cache maven && mvn -f /app/pom.xml clean package
+RUN mvn -B dependency:resolve-plugins dependency:resolve
 
-# Expose the port the app runs on
+COPY ./src ./src
+
+RUN mvn package -DskipTests
+
+FROM ibm-semeru-runtimes:open-17-jre
+
+WORKDIR /app
+
+COPY --from=builder /app/target/sua-auth-0.0.1-SNAPSHOT.jar ./sua-auth-0.0.1-SNAPSHOT.jar
+
 EXPOSE ${PORT}
 
-# Command to run the Spring Boot application when the container starts
-CMD ["java", "-XX:MaxRAM=150m", "-XX:+UseSerialGC", "-jar", "/app/target/sua-auth-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-XX:MaxRAM=200m", "-XX:+UseSerialGC", "-jar", "/app/sua-auth-0.0.1-SNAPSHOT.jar"]
